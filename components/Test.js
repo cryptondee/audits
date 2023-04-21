@@ -14,25 +14,38 @@ const filter = {
     "0x0d3648bd0f6ba80134a33ba9275ac585d9d315f0ad8355cddefde31afa28d0e9",
   ],
 };
+const weth = "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2";
+const baseURL =
+  "https://api.gopluslabs.io/api/v1/token_security/1?contract_addresses=";
 
-alchemy.ws.on(filter, (log, event) => {
-  const tokenA = substring(log.topics[1])
-  const tokenB = log.topics[2]
+alchemy.ws.on(filter, async (log, event) => {
+  const zero = "0x";
+  const tokenA = zero.concat(log.topics[1].substring(26));
+  const tokenB = zero.concat(log.topics[2].substring(26));
   console.log(log);
   console.log(`---`);
-  console.log('topic, method')
+  console.log("topic, method");
   console.log(log.topics[0]);
-  console.log('token a')
+  console.log("token a");
   console.log(log.topics[1]);
-  console.log('token b')
+  console.log(tokenA);
+  console.log("token b");
   console.log(log.topics[2]);
-  console.log('tx hash')
+  console.log(tokenB);
+  console.log("tx hash");
   console.log(log.transactionHash);
-  console.log('report')
-  const baseURL = 'https://api.gopluslabs.io/api/v1/token_security/1?contract_addresses='
-  if ()
-  
-
+  console.log("report");
+  if (tokenA === weth) {
+    const report = await axios
+      .get(`${baseURL}${tokenB}`)
+      .then((res) => res.data)
+      .then((data) => console.log(data));
+  } else {
+    const report = await axios
+      .get(`${baseURL}${tokenA}`)
+      .then((res) => res.data)
+      .then((data) => console.log(data));
+  }
 });
 
 function Test() {
