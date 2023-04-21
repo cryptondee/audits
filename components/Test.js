@@ -1,5 +1,6 @@
 import React from "react";
 import { Alchemy, AlchemySubscription, Network } from "alchemy-sdk";
+import axios from "axios";
 
 const config = {
   apiKey: process.env.alchemyAPI,
@@ -14,7 +15,25 @@ const filter = {
   ],
 };
 
-alchemy.ws.on(filter, (log, event) => console.log(log));
+alchemy.ws.on(filter, (log, event) => {
+  const tokenA = substring(log.topics[1])
+  const tokenB = log.topics[2]
+  console.log(log);
+  console.log(`---`);
+  console.log('topic, method')
+  console.log(log.topics[0]);
+  console.log('token a')
+  console.log(log.topics[1]);
+  console.log('token b')
+  console.log(log.topics[2]);
+  console.log('tx hash')
+  console.log(log.transactionHash);
+  console.log('report')
+  const baseURL = 'https://api.gopluslabs.io/api/v1/token_security/1?contract_addresses='
+  if ()
+  
+
+});
 
 function Test() {
   return <div>test</div>;
