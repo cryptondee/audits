@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Alchemy, AlchemySubscription, Network } from "alchemy-sdk";
 import axios from "axios";
 
@@ -22,15 +22,9 @@ alchemy.ws.on(filter, async (log, event) => {
   const zero = "0x";
   const tokenA = zero.concat(log.topics[1].substring(26));
   const tokenB = zero.concat(log.topics[2].substring(26));
-  console.log(log);
-  console.log(`---`);
-  console.log("topic, method");
-  console.log(log.topics[0]);
-  console.log("token a");
-  console.log(log.topics[1]);
+  console.log("token A");
   console.log(tokenA);
-  console.log("token b");
-  console.log(log.topics[2]);
+  console.log("token B");
   console.log(tokenB);
   console.log("tx hash");
   console.log(log.transactionHash);
@@ -39,17 +33,30 @@ alchemy.ws.on(filter, async (log, event) => {
     const report = await axios
       .get(`${baseURL}${tokenB}`)
       .then((res) => res.data)
-      .then((data) => console.log(data));
+      .then((data) => console.log(data.result));
   } else {
     const report = await axios
       .get(`${baseURL}${tokenA}`)
       .then((res) => res.data)
-      .then((data) => console.log(data));
+      .then((data) => console.log(data.result));
   }
 });
 
 function Test() {
-  return <div>test</div>;
+  const [items, setItems] = useState([]);
+
+  useEffect(() => {
+    setItems(["hi", "bye"]);
+  }, []);
+
+  return (
+    <div>
+      {" "}
+      {items.map((item) => (
+        <p>{item}</p>
+      ))}
+    </div>
+  );
 }
 
 export default Test;
