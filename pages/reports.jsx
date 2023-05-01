@@ -5,7 +5,7 @@ export default function Reports({ reports }) {
   return (
     <>
       <div>
-        <h1> Reports hi</h1>
+        <h1> Reports</h1>
         <ul>
           {reports.map((report) => {
             <li>
