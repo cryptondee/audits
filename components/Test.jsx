@@ -10,6 +10,7 @@ function Test() {
   const [report, setReport] = useState();
   const [prevTokenA, setPrevTokenA] = useState();
   const [prevTokenB, setPrevTokenB] = useState();
+  const [gpUrl, setGpUrl] = useState();
 
   const config = {
     apiKey: process.env.alchemyAPI,
@@ -20,7 +21,7 @@ function Test() {
     address: "0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f",
     topics: [
       "0x0d3648bd0f6ba80134a33ba9275ac585d9d315f0ad8355cddefde31afa28d0e9", // pairCreated
-      "0xe1fffcc4923d04b559f4d29a8bfc6cda04eb5b0d3c460751c2402c5c5cc9109c", // deposit
+      //"0xe1fffcc4923d04b559f4d29a8bfc6cda04eb5b0d3c460751c2402c5c5cc9109c", // deposit
     ],
   };
   const weth = "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2";
@@ -39,9 +40,10 @@ function Test() {
         tokenB,
         report,
       };
+      setGpUrl(url);
       setReport(report);
       if (report !== null) {
-        const res = await fetch("http://localhost:3000/api/addReport", {
+        const res = await fetch(`api/addReport`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(dataToSend),
@@ -68,7 +70,7 @@ function Test() {
         setPrevTokenA(tokenA);
         setPrevTokenB(tokenB);
       }
-    }, 10000);
+    }, 20000);
   }, [tokenA, tokenB]);
 
   useEffect(() => {
@@ -98,6 +100,27 @@ function Test() {
     };
   }, []);
 
+  function renderObject(obj) {
+    return Object.keys(obj).map((key) => {
+      const value = obj[key];
+      if (typeof value === "object" && value !== null) {
+        return (
+          <div key={key}>
+            <h2>{key}</h2>
+            {renderObject(value)}
+          </div>
+        );
+      } else {
+        return (
+          <div key={key}>
+            <h2>{key}</h2>
+            <p>{value}</p>
+          </div>
+        );
+      }
+    });
+  }
+
   return (
     <div>
       <h2>Token A</h2>
@@ -107,7 +130,8 @@ function Test() {
       <h2>hash</h2>
       {hash}
       <h2>Report</h2>
-      {JSON.stringify(report, null, 2)}
+      <a href={gpUrl}>{gpUrl}</a>
+      {typeof report === "string" && renderObject(JSON.parse(report))}
     </div>
   );
 }
