@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { Alchemy, AlchemySubscription, Network } from "alchemy-sdk";
 import axios from "axios";
 
@@ -40,19 +40,11 @@ function Test() {
     setA(tokenA);
     setB(tokenB);
     setHash(log.transactionHash);
-    getReport(tokenA, tokenB);
   });
 
   const getReport = async (tokenA, tokenB) => {
     const url = tokenA === weth ? `${baseURL}${tokenB}` : `${baseURL}${tokenA}`;
-    const report = await axios
-      .get(url)
-      .then((res) => res.data.result)
-      .then((report) => console.log(report))
-      .catch((err) => {
-        console.error(err);
-        return null;
-      });
+    const report = await axios.get(url).then((res) => res.data.result);
     const dataToSend = {
       url,
       tokenA,
@@ -75,35 +67,9 @@ function Test() {
       }
     }
   };
-
-  // const getReport = async (tokenA, tokenB) => {
-  //   if (tokenA === weth) {
-  //     const url = `${baseURL}${tokenB}`;
-  //     const report = await axios
-  //       .get(`${url}`)
-  //       .then((res) => res.data)
-  //       .then((data) => console.log(data.result));
-  //     setReport(report);
-  //     const dataToSend = {
-  //       url:url,
-  //       tokenA:tokenA,
-  //       tokenB:tokenB,
-  //       report:report,
-  //     };
-  //     const response = await fetch('/api/addReport.js', {
-  //       method: 'POST',
-  //       headers: {'Content-Type':'application/json'},
-  //       body: JSON.stringify(dataToSend),
-  //     })
-  //   } else {
-  //     const url = `${baseURL}${tokenA}`;
-  //     const report = await axios
-  //       .get(`${url}`)
-  //       .then((res) => res.data)
-  //       .then((data) => console.log(data.result));
-  //     setReport(report);
-  //   }
-  // };
+  useEffect(() => {
+    getReport(tokenA, tokenB);
+  }, [tokenA, tokenB]);
 
   return (
     <div>

@@ -1,16 +1,10 @@
-import dbConnect from "@/lib/dbConnect";
-import Response from "@/models/Response";
+import clientPromise from "@/lib/dbConnect";
 
-export default async function myDB(req, res) {
-  if (req.method !== "POST") {
-    res.status(405).json({ message: "Method not allowed" });
-    return;
-  }
-  await dbConnect();
+export default async (req, res) => {
   try {
-    const newReport = await Response.create(req.body);
-    res.status(201).json(newReport);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-}
+    const client = await clientPromise;
+    const db = client.db("test").collection("test");
+    const result = db.insertOne(req.body);
+    res.json(`added ${result.insertedId}`);
+  } catch (err) {}
+};
