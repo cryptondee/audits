@@ -1,24 +1,9 @@
 import React from "react";
 import clientPromise from "@/lib/dbConnect";
+import DisplayData from "@/components/DisplayData";
 
-export default function Reports({ reports }) {
-  return (
-    <>
-      <div>
-        <h1> Reports</h1>
-        <ul>
-          {reports.map((report) => {
-            <li>
-              <h4>report.date</h4>
-              <h4>report.tokenA</h4>
-              <h4>report.tokenB</h4>
-              <p>report.report</p>
-            </li>;
-          })}
-        </ul>
-      </div>
-    </>
-  );
+export default function Reports({ data }) {
+  return <DisplayData data={data} />;
 }
 
 export async function getServerSideProps() {
@@ -29,10 +14,10 @@ export async function getServerSideProps() {
       .collection("test")
       .find({})
       .sort({ date: -1 })
-      .limit(25)
+      .limit(50)
       .toArray();
     return {
-      props: { reports: JSON.parse(JSON.stringify(reports)) },
+      props: { data: JSON.parse(JSON.stringify(reports)) },
     };
   } catch (err) {
     console.error(err);
